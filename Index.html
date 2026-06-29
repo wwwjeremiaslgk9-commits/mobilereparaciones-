@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seguimiento Reparación</title>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "PEGAR_AQUI",
+      authDomain: "PEGAR_AQUI",
+      projectId: "PEGAR_AQUI",
+      storageBucket: "PEGAR_AQUI",
+      messagingSenderId: "PEGAR_AQUI",
+      appId: "PEGAR_AQUI"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+  </script>
+
+</head>
+
+<body>
+  <h2>Seguimiento de Reparación</h2>
+
+  <input id="codigo" placeholder="Código">
+  <button onclick="buscar()">Buscar</button>
+
+  <div id="resultado"></div>
+
+  <script>
+    function buscar() {
+      let codigo = document.getElementById("codigo").value;
+
+      db.collection("reparaciones")
+        .where("codigo", "==", codigo)
+        .get()
+        .then((snap) => {
+          let html = "";
+
+          snap.forEach(doc => {
+            let r = doc.data();
+
+            html = `
+              <h3>${r.cliente}</h3>
+              <p>Modelo: ${r.modelo}</p>
+              <p>Estado: ${r.estado}</p>
+              <p>Costo: $${r.costo}</p>
+              <p>Fecha: ${r.fechaIngreso}</p>
+            `;
+          });
+
+          document.getElementById("resultado").innerHTML = html || "No encontrado";
+        });
+    }
+  </script>
+
+</body>
+</html>
