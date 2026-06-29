@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Reparaciones</title>
+</head>
+<body>
+
+<h2>Panel de Administración</h2>
+
+<input id="codigo" placeholder="Código">
+<input id="cliente" placeholder="Cliente">
+<input id="modelo" placeholder="Modelo">
+<input id="estado" placeholder="Estado">
+<input id="costo" placeholder="Costo">
+
+<button onclick="guardar()">Guardar</button>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+
+<script>
+const firebaseConfig = {
+  apiKey: "PEGAR_AQUI",
+  authDomain: "PEGAR_AQUI",
+  projectId: "PEGAR_AQUI",
+  storageBucket: "PEGAR_AQUI",
+  messagingSenderId: "PEGAR_AQUI",
+  appId: "PEGAR_AQUI"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+function guardar(){
+  db.collection("reparaciones").add({
+    codigo: document.getElementById("codigo").value,
+    cliente: document.getElementById("cliente").value,
+    modelo: document.getElementById("modelo").value,
+    estado: document.getElementById("estado").value,
+    costo: document.getElementById("costo").value,
+    fechaIngreso: new Date().toLocaleDateString()
+  });
+
+  alert("Guardado");
+}
+</script>
+
+</body>
+</html>
