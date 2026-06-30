@@ -35,16 +35,31 @@
 
   <script>
     function buscar() {
-      let codigo = document.getElementById("codigo").value;
+     var codigo = document.getElementById("codigo").value;
 
-      db.collection("reparaciones")
-        .where("codigo", "==", codigo)
-        .get()
-        .then((snap) => {
-          let html = "";
+db.collection("reparaciones").doc(codigo).get().then(function(doc) {
 
-          snap.forEach(doc => {
-            let r = doc.data();
+    if (doc.exists) {
+
+        var data = doc.data();
+
+        document.getElementById("estado").innerText = data.estado;
+        document.getElementById("cliente").innerText = data.cliente;
+        document.getElementById("modelo").innerText = data.modelo;
+
+    } else {
+
+        document.getElementById("estado").innerText = "No encontrado";
+        document.getElementById("cliente").innerText = "";
+        document.getElementById("modelo").innerText = "";
+
+    }
+
+}).catch(function(error) {
+
+    document.getElementById("estado").innerText = "Error de búsqueda";
+
+});
 
             html = `
               <h3>${r.cliente}</h3>
