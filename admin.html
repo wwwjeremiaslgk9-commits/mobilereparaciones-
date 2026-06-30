@@ -11,7 +11,12 @@
 <input id="codigo" placeholder="Código">
 <input id="cliente" placeholder="Cliente">
 <input id="modelo" placeholder="Modelo">
-<input id="estado" placeholder="Estado">
+<select id="estado">
+  <option value="Recibido">📥 Recibido</option>
+  <option value="En reparación">🔧 En reparación</option>
+  <option value="Listo para entregar">✅ Listo para entregar</option>
+  <option value="Entregado">📦 Entregado</option>
+</select>
 <input id="costo" placeholder="Costo">
 
 <button onclick="guardar()">Guardar</button>
