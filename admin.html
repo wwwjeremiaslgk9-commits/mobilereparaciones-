@@ -1,56 +1,152 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Admin Reparaciones</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panel de Administración</title>
+
+<style>
+body{
+    font-family:Arial,sans-serif;
+    background:#f5f5f5;
+    margin:20px;
+}
+
+.container{
+    max-width:500px;
+    margin:auto;
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 0 10px rgba(0,0,0,.2);
+}
+
+h2{
+    text-align:center;
+}
+
+input,select,button{
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    border-radius:8px;
+    border:1px solid #ccc;
+    font-size:16px;
+    box-sizing:border-box;
+}
+
+button{
+    background:#1976d2;
+    color:white;
+    border:none;
+    font-weight:bold;
+}
+
+button:active{
+    opacity:.8;
+}
+</style>
+
 </head>
+
 <body>
+
+<div class="container">
 
 <h2>Panel de Administración</h2>
 
 <input id="codigo" placeholder="Código">
+
 <input id="cliente" placeholder="Cliente">
+
 <input id="modelo" placeholder="Modelo">
+
 <select id="estado">
-  <option value="Recibido">📥 Recibido</option>
-  <option value="En reparación">🔧 En reparación</option>
-  <option value="Listo para entregar">✅ Listo para entregar</option>
-  <option value="Entregado">📦 Entregado</option>
+
+<option value="Recibido">📥 Recibido</option>
+
+<option value="En reparación">🔧 En reparación</option>
+
+<option value="Listo para entregar">✅ Listo para entregar</option>
+
+<option value="Entregado">📦 Entregado</option>
+
 </select>
+
 <input id="costo" placeholder="Costo">
 
 <button onclick="guardar()">Guardar</button>
 
+</div>
+
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 
 <script>
+
 const firebaseConfig = {
-  apiKey: "AIzaSyDZV9pPEU5E5m6PNcomQyqo37ycbSDf4hI",
-  authDomain: "mobilereparaciones-e55e6.firebaseapp.com",
-  databaseURL: "https://mobilereparaciones-e55e6-default-rtdb.firebaseio.com",
-  projectId: "mobilereparaciones-e55e6",
-  storageBucket: "mobilereparaciones-e55e6.firebasestorage.app",
-  messagingSenderId: "918152977833",
-  appId: "1:918152977833:web:566fa1d096d475142338b8"
+
+apiKey: "AIzaSyDZV9pPEU5E5m6PNcomQyqo37ycbSDf4hI",
+
+authDomain: "mobilereparaciones-e55e6.firebaseapp.com",
+
+databaseURL: "https://mobilereparaciones-e55e6-default-rtdb.firebaseio.com",
+
+projectId: "mobilereparaciones-e55e6",
+
+storageBucket: "mobilereparaciones-e55e6.firebasestorage.app",
+
+messagingSenderId: "918152977833",
+
+appId: "1:918152977833:web:566fa1d096d475142338b8"
+
 };
 
 firebase.initializeApp(firebaseConfig);
+
 const db = firebase.firestore();
-
 function guardar(){
-  db.collection("reparaciones").add({
-    codigo: document.getElementById("codigo").value,
-    cliente: document.getElementById("cliente").value,
-    modelo: document.getElementById("modelo").value,
-    estado: document.getElementById("estado").value,
-    costo: document.getElementById("costo").value,
-    fechaIngreso: new Date().toLocaleDateString()
-  });
 
-  alert("Guardado");
+const codigo=document.getElementById("codigo").value.trim();
+
+if(codigo==""){
+alert("Ingrese un código");
+return;
 }
+
+db.collection("reparaciones").doc(codigo).set({
+
+codigo:codigo,
+
+cliente:document.getElementById("cliente").value,
+
+modelo:document.getElementById("modelo").value,
+
+estado:document.getElementById("estado").value,
+
+costo:document.getElementById("costo").value,
+
+fechaIngreso:new Date().toLocaleDateString()
+
+})
+
+.then(function(){
+
+alert("Datos guardados correctamente");
+
+})
+
+.catch(function(error){
+
+alert("Error: "+error);
+
+});
+
+}
+
 </script>
 
 </body>
+
 </html>
