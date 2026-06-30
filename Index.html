@@ -1,15 +1,80 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Seguimiento Reparación</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seguimiento de Reparación</title>
 
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background:#f2f2f2;
+    padding:20px;
+}
 
-  <script>
-    const firebaseConfig = {
+.container{
+    max-width:500px;
+    margin:auto;
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 0 10px rgba(0,0,0,0.2);
+}
+
+input,button{
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    font-size:16px;
+    border-radius:8px;
+    border:1px solid #ccc;
+}
+
+button{
+    background:#1976d2;
+    color:white;
+    border:none;
+    font-weight:bold;
+}
+
+h3{
+    margin-bottom:5px;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Seguimiento de Reparación</h2>
+
+<input id="codigo" placeholder="Ingrese su código">
+<button onclick="buscar()">Buscar</button>
+
+<hr>
+
+<h3>Estado:</h3>
+<div id="estado">---</div>
+
+<h3>Cliente:</h3>
+<div id="cliente">---</div>
+
+<h3>Modelo:</h3>
+<div id="modelo">---</div>
+
+<h3>Costo:</h3>
+<div id="costo">---</div>
+
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+
+<script>
+
+const firebaseConfig = {
   apiKey: "AIzaSyDZV9pPEU5E5m6PNcomQyqo37ycbSDf4hI",
   authDomain: "mobilereparaciones-e55e6.firebaseapp.com",
   databaseURL: "https://mobilereparaciones-e55e6-default-rtdb.firebaseio.com",
@@ -19,61 +84,47 @@
   appId: "1:918152977833:web:566fa1d096d475142338b8"
 };
 
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-  </script>
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 
-</head>
+function buscar(){
 
-<body>
-  <h2>Seguimiento de Reparación</h2>
+var codigo = document.getElementById("codigo").value.trim();
 
-  <input id="codigo" placeholder="Código">
-  <button onclick="buscar()">Buscar</button>
+if(codigo==""){
+alert("Ingrese el código");
+return;
+}
 
-  <div id="resultado"></div>
+db.collection("reparaciones").doc(codigo).get().then(function(doc){
 
-  <script>
-    function buscar() {
-     var codigo = document.getElementById("codigo").value;
+if(doc.exists){
 
-db.collection("reparaciones").doc(codigo).get().then(function(doc) {
+var data = doc.data();
 
-    if (doc.exists) {
+document.getElementById("estado").innerText = data.estado;
+document.getElementById("cliente").innerText = data.cliente;
+document.getElementById("modelo").innerText = data.modelo;
+document.getElementById("costo").innerText = data.costo;
 
-        var data = doc.data();
+}else{
 
-        document.getElementById("estado").innerText = data.estado;
-        document.getElementById("cliente").innerText = data.cliente;
-        document.getElementById("modelo").innerText = data.modelo;
+document.getElementById("estado").innerText = "No encontrado";
+document.getElementById("cliente").innerText = "";
+document.getElementById("modelo").innerText = "";
+document.getElementById("costo").innerText = "";
 
-    } else {
+}
 
-        document.getElementById("estado").innerText = "No encontrado";
-        document.getElementById("cliente").innerText = "";
-        document.getElementById("modelo").innerText = "";
+}).catch(function(error){
 
-    }
-
-}).catch(function(error) {
-
-    document.getElementById("estado").innerText = "Error de búsqueda";
+document.getElementById("estado").innerText = "Error de búsqueda";
 
 });
 
-            html = `
-              <h3>${r.cliente}</h3>
-              <p>Modelo: ${r.modelo}</p>
-              <p>Estado: ${r.estado}</p>
-              <p>Costo: $${r.costo}</p>
-              <p>Fecha: ${r.fechaIngreso}</p>
-            `;
-          });
+}
 
-          document.getElementById("resultado").innerHTML = html || "No encontrado";
-        });
-    }
-  </script>
+</script>
 
 </body>
 </html>
